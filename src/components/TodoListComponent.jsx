@@ -4,7 +4,7 @@ import {AiFillDelete} from 'react-icons/ai'
 import {TbEdit} from 'react-icons/tb'
 import {GrStatusGood} from 'react-icons/gr'
 import {GrStatusUnknown} from 'react-icons/gr'
-
+import {BE_URL} from '../Info/BACK_END.js'
 
 import './TodoList.css'
 const TodoListComponent = () => {
@@ -19,7 +19,7 @@ const TodoListComponent = () => {
   const addTodoList = () => {
     if(button === 'Add' && text !== ''){
     
-      fetch(`http://localhost:3500/api/v1/list`,{
+      fetch(`${BE_URL}/list`,{
         method:`POST`,
         crossDomain:true,
         headers: {
@@ -41,7 +41,7 @@ const TodoListComponent = () => {
     if(button === 'Update' && text !== ''){
       const id =listId;
       console.log(taskStatus);
-      fetch(`http://localhost:3500/api/v1/list/${id}`,{
+      fetch(`${BE_URL}/list/${id}`,{
         method:`PATCH`,
         crossDomain:true,
         headers: {
@@ -68,7 +68,7 @@ const TodoListComponent = () => {
 
   const getAllTask = (setTaskList)=>{
     try{
-    axios.get(`https://todo-be-three.vercel.app/api/v1/list`)
+    axios.get(`${BE_URL}/list`)
     
     .then(({data})=>{
       console.log(data)
@@ -92,7 +92,7 @@ const TodoListComponent = () => {
   }
 
   function deleteAList (id){
-    fetch(`http://localhost:3500/api/v1/list/${id}`,{
+    fetch(`${BE_URL}/list/${id}`,{
       method:`DELETE`,
       crossDomain:true,
       headers: {
