@@ -68,7 +68,7 @@ const TodoListComponent = () => {
 
   const getAllTask = (setTaskList)=>{
     try{
-    axios.get(`https://todo-be-three.vercel.app/api/v1list`)
+    axios.get(`https://todo-be-three.vercel.app/api/v1/list`)
     
     .then(({data})=>{
       console.log(data)
