@@ -90,13 +90,17 @@ const TodoListComponent = () => {
    
     
   }
-  const checkBoxHandler = (e) => {
+  const checkBoxHandler = () => {
+    
     if(taskStatus === false){
       setTaskStatus(true)
+      
     }
     if(taskStatus === true){
       setTaskStatus(false)
+      
     }
+    
     
   }
   const handleKeyPress = (e) => {
