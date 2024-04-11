@@ -6,6 +6,7 @@ import {GrStatusGood} from 'react-icons/gr'
 import {GrStatusUnknown} from 'react-icons/gr'
 import {BE_URL} from '../Info/BACK_END.js'
 
+
 import './TodoList.css'
 const TodoListComponent = () => {
   const [text,setText] = useState('')
@@ -13,73 +14,59 @@ const TodoListComponent = () => {
   const [button,setButton] = useState('Add')
   const [listId,setListId] = useState('')
   const [taskStatus,setTaskStatus] = useState(false)
+
+  async function getAllTask(){
+    try{
+      const response = await axios.get(`${BE_URL}/list`)
+      console.log(response.data);
+       setTaskList(await (response).data);
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
+
   useEffect(() => {
-    getAllTask(setTaskList);
+    getAllTask();
   },[])
   const addTodoList = () => {
     if(button === 'Add' && text !== ''){
-    
-      fetch(`${BE_URL}/list`,{
-        method:`POST`,
-        crossDomain:true,
-        headers: {
-          'content-type' : 'application/json',
-          'Access-Control-Allow-Origin':'*'
-        },
-
-        body : JSON.stringify({
-          text:text
+      try{
+        axios.post(`${BE_URL}/list`,
+          {
+            text:text
+          }
+        ).then((response) => {
+          console.log(response.data);
+          getAllTask()
         })
-      })
-      .then((response)=>response.json())
-      .then((data)=>{
-        console.log(data);
-
-      })
-      getAllTask(setTaskList)
+      }
+      catch(error){
+        console.log(error)
+      }
+      
     }
     if(button === 'Update' && text !== ''){
       const id =listId;
-      console.log(taskStatus);
-      fetch(`${BE_URL}/list/${id}`,{
-        method:`PATCH`,
-        crossDomain:true,
-        headers: {
-          'content-type' : 'application/json',
-          'Access-Control-Allow-Origin':'*'
-        },
-        body: JSON.stringify({
+      try{
+        axios.patch(`${BE_URL}/list/${id}`,{
           text:text,
           id:id,
           status:taskStatus
+        }).then((response) => {console.log(response)
+        getAllTask()
         })
-      })
-      .then((response)=>response.json())
-      .then((data)=>{
-        console.log(data)
-        getAllTask(setTaskList)
-      })
-      
+      }
+      catch(err){
+        console.log(err)
+      }
       setButton('Add')
       setText('')
     }
 
   }
 
-  const getAllTask = (setTaskList)=>{
-    try{
-    axios.get(`${BE_URL}/list`)
-    
-    .then(({data})=>{
-      console.log(data)
-      setTaskList(data)
-      console.log(data);
-    }).catch(error=>console.log(error))
-  }
-  catch(error){
-    console.log(error)
-  }
-  }
+
 
   function updateTodo(id,text) {
     
@@ -91,21 +78,17 @@ const TodoListComponent = () => {
     
   }
 
-  function deleteAList (id){
-    fetch(`${BE_URL}/list/${id}`,{
-      method:`DELETE`,
-      crossDomain:true,
-      headers: {
-        'content-type' : 'application/json',
-        'Access-Control-Allow-Origin':'*'
-      }
-      
-    })
-    .then((response)=>response.json())
-    .then((data)=>{
-      console.log(data)
-      getAllTask(setTaskList)
-    })
+  async function deleteAList (id){
+    try{
+      const response = axios.delete(`${BE_URL}/list/${id}`);
+      console.log((await response).data)
+      await getAllTask();
+    }
+    catch(err){
+
+    }
+   
+    
   }
   const checkBoxHandler = (e) => {
     if(taskStatus === false){
