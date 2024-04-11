@@ -39,6 +39,7 @@ const TodoListComponent = () => {
         ).then((response) => {
           console.log(response.data);
           getAllTask()
+          alert('Task Added..')
         })
       }
       catch(error){
@@ -55,7 +56,9 @@ const TodoListComponent = () => {
           status:taskStatus
         }).then((response) => {console.log(response)
         getAllTask()
+        alert('Task Updated')
         })
+        
       }
       catch(err){
         console.log(err)
@@ -83,6 +86,7 @@ const TodoListComponent = () => {
       const response = axios.delete(`${BE_URL}/list/${id}`);
       console.log((await response).data)
       await getAllTask();
+      alert("Task Deleted")
     }
     catch(err){
 
